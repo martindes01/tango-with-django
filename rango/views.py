@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-# Import Category model
-from rango.models import Category
+# Import models
+from rango.models import Category, Page
 
 def index(request):
     # Order all currently stored categories by likes in descending order and retrieve top 5
@@ -13,8 +13,28 @@ def index(request):
         'categories': category_list,
     }
 
-    # Return rendered response to send to client
+    # Return rendered response to client
     return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
     return render(request, 'rango/about.html')
+
+def show_category(request, category_name_slug):
+    context_dict = {}
+
+    try:
+        # Find category with given slug
+        # get() method returns model instance or raises DoesNotExist exception
+        category = Category.objects.get(slug=category_name_slug)
+        
+        # Retrieve list of pages associated with category
+        pages = Page.objects.filter(category=category)
+
+        # Add results to context dictionary under relevent keys
+        context_dict['category'] = category
+        context_dict['pages'] = pages
+    except Category.DoesNotExist:
+        context_dict['category'] = None
+        context_dict['pages'] = None
+
+    return render(request, 'rango/category.html', context_dict)
