@@ -7,10 +7,7 @@ django.setup()
 from rango.models import Category, Page
 
 def populate():
-    # First we will create lists of dictionaries containing the pages we want to add into each category.
-    # Then we will create a dictionary of dictionaries for our categories.
-    # This might seem a little bit confusing, but it allows us to iterate through each data structure, and add the data to our models.
-
+    # Create lists of page dictionaries for each category
     python_pages = [
         {
             "title": "Official Python Tutorial",
@@ -25,7 +22,6 @@ def populate():
             "url": "http://www.korokithakis.net/tutorials/python/",
         },
     ]
-
     django_pages = [
         {
             "title": "Official Django Tutorial",
@@ -40,7 +36,6 @@ def populate():
             "url": "http://www.tangowithdjango.com/",
         },
     ]
-
     other_pages = [
         {
             "title": "Bottle",
@@ -52,6 +47,7 @@ def populate():
         },
     ]
 
+    # Create dictionary of categories, including page dictionary lists
     cats = {
         "Python": {
             "pages": python_pages,
@@ -70,16 +66,15 @@ def populate():
         },
     }
 
-    # If you want to add more categories or pages, add them to the dictionaries above.
 
-    # The code below goes through the cats dictionary, then adds each category, and then adds all the associated pages for that category.
-
+    # Add each category in category dictionary
     for cat, cat_data in cats.items():
         c = add_cat(cat, cat_data["views"], cat_data["likes"])
+        # Add pages associated to category
         for p in cat_data["pages"]:
             add_page(c, p["title"], p["url"])
 
-    # Print out the categories we have added.
+    # Print categories added
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):
             print("- {0} - {1}".format(str(c), str(p)))
