@@ -1,5 +1,7 @@
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 # Import forms and models
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
@@ -143,3 +145,30 @@ def show_category(request, category_name_slug):
         context_dict['pages'] = None
 
     return render(request, 'rango/category.html', context_dict)
+
+def user_login(request):
+    if request.method == 'POST':
+        # request.POST.get() returns None if value does not exist
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Check validity and return user object
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                # Account valid and active
+                # Log in and return to index
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                # Inactive account
+                return HttpResponse("Your Rango account is disabled.")
+        else:
+            # Invalid login
+            print("Invalid login details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        # Render form
+        context_dict = {}
+        return render(request, 'rango/login.html', context_dict)
