@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 # Import forms and models
-from rango.forms import CategoryForm, PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.models import Category, Page
 
 def index(request):
@@ -76,6 +76,53 @@ def add_page(request, category_name_slug):
         'category': category,
     }
     return render(request, 'rango/add_page.html', context_dict)
+
+def register(request):
+    # Set registration success false initially
+    registered = False
+
+    if request.method == 'POST':
+        # Retrieve raw form data
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # Save user form data to database
+            user = user_form.save()
+
+            # Hash password with set_password() method
+            user.set_password(user.password)
+            user.save()
+
+            # Set commit=False since user attribute must set separately
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            # Retrieve profile picture from form and add to user profile
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            # Save user profile model instance
+            profile.save()
+
+            # Set registration success true
+            registered = True
+        else:
+            # Print form errors
+            print(user_form.errors, profile_form.errors)
+    else:
+        # Not HTTP POST
+        # Initialise blank forms
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    # Render form, including error messages
+    context_dict = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'registered': registered,
+    }
+    return render(request, 'rango/register.html', context_dict)
 
 def show_category(request, category_name_slug):
     context_dict = {}
