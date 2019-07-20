@@ -1,6 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
-from django.urls import reverse
 
 # Import forms and models
 from rango.forms import CategoryForm, PageForm
@@ -23,7 +22,8 @@ def index(request):
     return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
-    return render(request, 'rango/about.html')
+    context_dict = {}
+    return render(request, 'rango/about.html', context_dict)
 
 def add_category(request):
     form = CategoryForm()
