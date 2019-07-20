@@ -5,12 +5,16 @@ from django.shortcuts import render
 from rango.models import Category, Page
 
 def index(request):
-    # Order all currently stored categories by likes in descending order and retrieve top 5
+    # Order all categories by likes in descending order and retrieve top 5
     category_list = Category.objects.order_by('-likes')[:5]
+
+    # Order all pages by views in descending order and retrieve top 5
+    page_list = Page.objects.order_by('-views')[:5]
 
     # Construct dictionary to pass to template engine as its context
     context_dict = {
         'categories': category_list,
+        'pages': page_list,
     }
 
     # Return rendered response to client
