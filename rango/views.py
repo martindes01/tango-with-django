@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -79,6 +79,11 @@ def add_page(request, category_name_slug):
         'category': category,
     }
     return render(request, 'rango/add_page.html', context_dict)
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 def register(request):
     # Set registration success false initially

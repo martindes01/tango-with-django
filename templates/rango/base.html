@@ -31,6 +31,21 @@
 
         <div>
             <ul>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'restricted' %}">Restricted page</a>
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}">Log out</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'login' %}">Log in</a>
+                </li>
+                <li>
+                    <a href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
                 <li>
                     <a href="{% url 'add_category' %}">Add a new category</a>
                 </li>
@@ -39,12 +54,6 @@
                 </li>
                 <li>
                     <a href="{% url 'index' %}">Index</a>
-                </li>
-                <li>
-                    <a href="{% url 'register' %}">Sign up</a>
-                </li>
-                <li>
-                    <a href="{% url 'login' %}">Log in</a>
                 </li>
             </ul>
         </div>
