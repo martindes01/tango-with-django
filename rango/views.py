@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -125,6 +126,10 @@ def register(request):
         'registered': registered,
     }
     return render(request, 'rango/register.html', context_dict)
+
+@login_required
+def restricted(request):
+    return HttpResponse("Since you're logged in, you can see this text!")
 
 def show_category(request, category_name_slug):
     context_dict = {}
