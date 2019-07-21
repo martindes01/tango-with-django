@@ -137,6 +137,18 @@ MEDIA_ROOT = MEDIA_DIR
 
 MEDIA_URL = '/media/'
 
+
 # Login
 
 LOGIN_URL = '/rango/login/'
+
+
+# Cookies
+
+# Set True for browser-length sessions
+# Set False for persistent sessions (default)
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Set cookie lifetime in seconds
+# 1209600 for 14 days
+#SESSION_COOKIE_AGE = 1209600
