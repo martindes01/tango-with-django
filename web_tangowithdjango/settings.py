@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -138,11 +139,6 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 
-# Login
-
-LOGIN_URL = '/rango/login/'
-
-
 # Cookies
 
 # Set True for browser-length sessions
@@ -152,3 +148,19 @@ LOGIN_URL = '/rango/login/'
 # Set cookie lifetime in seconds
 # 1209600 for 14 days
 #SESSION_COOKIE_AGE = 1209600
+
+
+# Registration (django-registration-redux)
+
+# Set True to allow registration of new accounts (default)
+#REGISTRATION_OPEN = True
+
+# Activation period after which account will remain permanently inactive
+# Account may be deleted by provided maintenance scripts
+ACCOUNT_ACTIVATION_DAYS = 7
+
+LOGIN_REDIRECT_URL = '/rango/'
+LOGIN_URL = '/accounts/login/'
+
+# Set True to allow automatic login after account activation (default False)
+REGISTRATION_AUTO_LOGIN = True
