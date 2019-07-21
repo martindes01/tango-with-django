@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -8,7 +9,31 @@ from django.urls import reverse
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.models import Category, Page
 
+def visitor_cookie_handler(request, response):
+    # Cast value of visits cookie to int, default 1
+    visits = int(request.COOKIES.get('visits', '1'))
+
+    # Cast value of last_visit cookie to datetime, default now
+    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    # Test whether at least 1 day has passed since last visit
+    if (datetime.now() - last_visit_time).days > 0:
+        visits = visits + 1
+
+        # Update last visit_cookie
+        response.set_cookie('last_visit', str(datetime.now()))
+    else:
+        # Set last visit_cookie
+        response.set_cookie('last_visit', last_visit_cookie)
+
+    # Set or update visits cookie
+    response.set_cookie('visits', visits)
+
 def index(request):
+    # Set cookie to test in about() view
+    request.session.set_test_cookie()
+
     # Order all categories by likes in descending order and retrieve top 5
     category_list = Category.objects.order_by('-likes')[:5]
 
@@ -21,10 +46,21 @@ def index(request):
         'pages': page_list,
     }
 
+    # Render response
+    response = render(request, 'rango/index.html', context=context_dict)
+
+    # Call helper function to handle cookies
+    visitor_cookie_handler(request, response)
+
     # Return rendered response to client
-    return render(request, 'rango/index.html', context=context_dict)
+    return response
 
 def about(request):
+    # Test cookie set in index() view
+    if request.session.test_cookie_worked():
+        print("TEST COOKIE WORKED!")
+        request.session.delete_test_cookie()
+
     context_dict = {}
     return render(request, 'rango/about.html', context_dict)
 
