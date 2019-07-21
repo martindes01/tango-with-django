@@ -1,0 +1,12 @@
+{% extends 'rango/base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+    <h1>Register for Rango</h1>
+    <form method="POST" action=".">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}

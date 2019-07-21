@@ -39,14 +39,14 @@
                     <a href="{% url 'restricted' %}">Restricted page</a>
                 </li>
                 <li>
-                    <a href="{% url 'logout' %}">Log out</a>
+                    <a href="{% url 'auth_logout' %}?next=/rango/">Log out</a>
                 </li>
             {% else %}
                 <li>
-                    <a href="{% url 'login' %}">Log in</a>
+                    <a href="{% url 'auth_login' %}">Log in</a>
                 </li>
                 <li>
-                    <a href="{% url 'register' %}">Register</a>
+                    <a href="{% url 'registration_register' %}">Register</a>
                 </li>
             {% endif %}
                 <li>

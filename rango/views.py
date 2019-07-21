@@ -1,13 +1,13 @@
-from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-# Import forms and models
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.models import Category, Page
+
+from datetime import datetime
 
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -125,52 +125,52 @@ def add_page(request, category_name_slug):
     }
     return render(request, 'rango/add_page.html', context_dict)
 
-def register(request):
-    # Set registration success false initially
-    registered = False
+# def register(request):
+#     # Set registration success false initially
+#     registered = False
 
-    if request.method == 'POST':
-        # Retrieve raw form data
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
+#     if request.method == 'POST':
+#         # Retrieve raw form data
+#         user_form = UserForm(data=request.POST)
+#         profile_form = UserProfileForm(data=request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            # Save user form data to database
-            user = user_form.save()
+#         if user_form.is_valid() and profile_form.is_valid():
+#             # Save user form data to database
+#             user = user_form.save()
 
-            # Hash password with set_password() method
-            user.set_password(user.password)
-            user.save()
+#             # Hash password with set_password() method
+#             user.set_password(user.password)
+#             user.save()
 
-            # Set commit=False since user attribute must set separately
-            profile = profile_form.save(commit=False)
-            profile.user = user
+#             # Set commit=False since user attribute must set separately
+#             profile = profile_form.save(commit=False)
+#             profile.user = user
 
-            # Retrieve profile picture from form and add to user profile
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
+#             # Retrieve profile picture from form and add to user profile
+#             if 'picture' in request.FILES:
+#                 profile.picture = request.FILES['picture']
 
-            # Save user profile model instance
-            profile.save()
+#             # Save user profile model instance
+#             profile.save()
 
-            # Set registration success true
-            registered = True
-        else:
-            # Print form errors
-            print(user_form.errors, profile_form.errors)
-    else:
-        # Not HTTP POST
-        # Initialise blank forms
-        user_form = UserForm()
-        profile_form = UserProfileForm()
+#             # Set registration success true
+#             registered = True
+#         else:
+#             # Print form errors
+#             print(user_form.errors, profile_form.errors)
+#     else:
+#         # Not HTTP POST
+#         # Initialise blank forms
+#         user_form = UserForm()
+#         profile_form = UserProfileForm()
 
-    # Render form, including error messages
-    context_dict = {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        'registered': registered,
-    }
-    return render(request, 'rango/register.html', context_dict)
+#     # Render form, including error messages
+#     context_dict = {
+#         'user_form': user_form,
+#         'profile_form': profile_form,
+#         'registered': registered,
+#     }
+#     return render(request, 'rango/register.html', context_dict)
 
 @login_required
 def restricted(request):
@@ -196,37 +196,3 @@ def show_category(request, category_name_slug):
         context_dict['pages'] = None
 
     return render(request, 'rango/category.html', context_dict)
-
-def user_login(request):
-    context_dict = {}
-
-    if request.method == 'POST':
-        # request.POST.get() returns None if value does not exist
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Check validity and return user object
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                # Account valid and active
-                # Log in and return to index
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                # Inactive account
-                return HttpResponse("Your Rango account is disabled.")
-        else:
-            # Invalid login
-            print("Invalid login details: {0}, {1}".format(username, password))
-            context_dict['error'] = 'Username or password is incorrect.'
-            context_dict['username'] = username
-    
-    # Render form, including error messages
-    return render(request, 'rango/login.html', context_dict)
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
