@@ -54,7 +54,6 @@ def index(request):
 
     # Call helper function to handle cookies
     visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
 
     # Return rendered response to client
     return render(request, 'rango/index.html', context=context_dict)
@@ -65,7 +64,11 @@ def about(request):
         print("TEST COOKIE WORKED!")
         request.session.delete_test_cookie()
 
-    context_dict = {}
+    # Call helper function to handle cookies
+    visitor_cookie_handler(request)
+    context_dict = {
+        'visits': request.session['visits']
+    }
     return render(request, 'rango/about.html', context_dict)
 
 @login_required
