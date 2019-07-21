@@ -33,6 +33,9 @@
             <ul>
             {% if user.is_authenticated %}
                 <li>
+                    <a href="{% url 'add_category' %}">Add a new category</a>
+                </li>
+                <li>
                     <a href="{% url 'restricted' %}">Restricted page</a>
                 </li>
                 <li>
@@ -46,9 +49,6 @@
                     <a href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
-                <li>
-                    <a href="{% url 'add_category' %}">Add a new category</a>
-                </li>
                 <li>
                     <a href="{% url 'about' %}">About Rango</a>
                 </li>

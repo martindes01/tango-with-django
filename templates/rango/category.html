@@ -22,9 +22,11 @@
             <strong>There are no pages in this category.</strong>
         {% endif %}
         </div><br />
+        {% if user.is_authenticated %}
         <div>
             <a href="{% url 'add_page' category.slug %}">Add a new page</a>
         </div>
+        {% endif %}
     {% else %}
         <strong>The specified category does not exist!</strong>
     {% endif %}

@@ -28,6 +28,7 @@ def about(request):
     context_dict = {}
     return render(request, 'rango/about.html', context_dict)
 
+@login_required
 def add_category(request):
     form = CategoryForm()
 
@@ -49,6 +50,7 @@ def add_category(request):
     }
     return render(request, 'rango/add_category.html', context_dict)
 
+@login_required
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -79,11 +81,6 @@ def add_page(request, category_name_slug):
         'category': category,
     }
     return render(request, 'rango/add_page.html', context_dict)
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
 
 def register(request):
     # Set registration success false initially
@@ -134,7 +131,8 @@ def register(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    context_dict = {}
+    return render(request, 'rango/restricted.html', context_dict)
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -157,6 +155,8 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 def user_login(request):
+    context_dict = {}
+
     if request.method == 'POST':
         # request.POST.get() returns None if value does not exist
         username = request.POST.get('username')
@@ -177,8 +177,13 @@ def user_login(request):
         else:
             # Invalid login
             print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        # Render form
-        context_dict = {}
-        return render(request, 'rango/login.html', context_dict)
+            context_dict['error'] = 'Username or password is incorrect.'
+            context_dict['username'] = username
+    
+    # Render form, including error messages
+    return render(request, 'rango/login.html', context_dict)
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
