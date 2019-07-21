@@ -9,12 +9,18 @@ from django.urls import reverse
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.models import Category, Page
 
-def visitor_cookie_handler(request, response):
+def get_server_side_cookie(request, cookie, default_val=None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+def visitor_cookie_handler(request):
     # Cast value of visits cookie to int, default 1
-    visits = int(request.COOKIES.get('visits', '1'))
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
 
     # Cast value of last_visit cookie to datetime, default now
-    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
     last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
 
     # Test whether at least 1 day has passed since last visit
@@ -22,13 +28,13 @@ def visitor_cookie_handler(request, response):
         visits = visits + 1
 
         # Update last visit_cookie
-        response.set_cookie('last_visit', str(datetime.now()))
+        request.session['last_visit'] = str(datetime.now())
     else:
         # Set last visit_cookie
-        response.set_cookie('last_visit', last_visit_cookie)
+        request.session['last_visit'] = last_visit_cookie
 
     # Set or update visits cookie
-    response.set_cookie('visits', visits)
+    request.session['visits'] = visits
 
 def index(request):
     # Set cookie to test in about() view
@@ -46,14 +52,12 @@ def index(request):
         'pages': page_list,
     }
 
-    # Render response
-    response = render(request, 'rango/index.html', context=context_dict)
-
     # Call helper function to handle cookies
-    visitor_cookie_handler(request, response)
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
 
     # Return rendered response to client
-    return response
+    return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
     # Test cookie set in index() view
