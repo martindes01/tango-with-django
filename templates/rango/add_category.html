@@ -8,7 +8,7 @@
 
 {% block body_block %}
     <h1>Add a new category</h1>
-    <div>
+    <p>
         <form id="category_form" method="POST" action="{% url 'add_category' %}">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
@@ -21,5 +21,5 @@
         {% endfor %}
             <input type="submit" name="submit" value="Add category" />
         </form>
-    </div>
+    </p>
 {% endblock %}

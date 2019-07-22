@@ -21,13 +21,16 @@
         {% else %}
             <strong>There are no pages in this category.</strong>
         {% endif %}
-        </div><br />
-        {% if user.is_authenticated %}
-        <div>
-            <a href="{% url 'add_page' category.slug %}">Add a new page</a>
         </div>
+
+        {% if user.is_authenticated %}
+        <p>
+            <a href="{% url 'add_page' category.slug %}">Add a new page</a>
+        </p>
         {% endif %}
     {% else %}
-        <strong>The specified category does not exist!</strong>
+        <p>
+            <strong>The specified category does not exist!</strong>
+        </p>
     {% endif %}
 {% endblock %}

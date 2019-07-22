@@ -2,14 +2,20 @@
 
 {% load staticfiles %}
 
+{% block title_block %}
+    Log in
+{% endblock %}
+
 {% block body_block %}
     <h1>Log in to Rango</h1>
-    <form method="POST" action=".">
-    {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Log in" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+    <p>
+        <form method="POST" action=".">
+        {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Log in" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </p>
     <p>
         Not a member?
         <a href="{% url 'registration_register' %}">Register</a>

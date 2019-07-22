@@ -9,7 +9,7 @@
 {% block body_block %}
     {% if category %}
         <h1>Add a new page to {{ category.name }}</h1>
-        <div>
+        <p>
             <form id="page_form" method="POST" action="{% url 'add_page' category.slug %}">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -22,10 +22,10 @@
             {% endfor %}
                 <input type="submit" name="submit" value="Add page" />
             </form>
-        </div>
+        </p>
     {% else %}
-        <div>
+        <p>
             <strong>The specified category does not exist!</strong>
-        </div>
+        </p>
     {% endif %}
 {% endblock %}

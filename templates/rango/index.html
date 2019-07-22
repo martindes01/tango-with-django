@@ -4,13 +4,13 @@
 
 {% block body_block %}
     <h1>Rango says...</h1>
-    <div>
+    <p>
     {% if user.is_authenticated %}
         howdy {{ user.username }}!
     {% else %}
         hey there partner!
     {% endif %}
-    </div>
+    </p>
 
     <h2>Most liked categories</h2>
     <div>
@@ -42,7 +42,7 @@
     {% endif %}
     </div>
     
-    <div>
+    <p>
         <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" />
-    </div>
+    </p>
 {% endblock %}

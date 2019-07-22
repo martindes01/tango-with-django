@@ -8,16 +8,18 @@
 
 {% block body_block %}
     <h1>Rango says...</h1>
-    <div>here is the about page.</div><br />
+    <p>here is the about page.</p>
     
-    <div>You have visited Rango {{ visits }} times!</p>
+    <p>You have visited Rango {{ visits }} time(s)!</p>
     
-    <div>
-        <strong>This tutorial has been put together by martindes01.</strong><br /><br />
+    <p>
+        <strong>This tutorial has been put together by martindes01.</strong>
+    </p>
+    <p>
         <img src="{{ MEDIA_URL }}cat.jpg" alt="The martindes01 cat" />
-    </div><br />
+    </p>
 
-    <div>
+    <p>
         <img src="{% static "images/thing.png" %}" alt="A thing" />
-    </div>
+    </p>
 {% endblock %}
