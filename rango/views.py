@@ -1,13 +1,16 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.models import Category, Page
 
 from datetime import datetime
+
+
+# Cookie helper functions
 
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -35,6 +38,38 @@ def visitor_cookie_handler(request):
 
     # Set or update visits cookie
     request.session['visits'] = visits
+
+
+# View functions
+
+def track_url(request):
+    # Initially assume page_id not provided
+    page_id = None
+
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            try:
+                # GET[] method returns int given as base 10 literal or raises ValueError exception
+                page_id = request.GET['page_id']
+
+                try:
+                    # Find page with given id
+                    # get() method returns model instance or raises DoesNotExist exception
+                    page = Page.objects.get(id=page_id)
+
+                    # Increment page views and save
+                    page.views = page.views + 1
+                    page.save()
+
+                    # Redirect to page
+                    return redirect(page.url)
+                except Page.DoesNotExist:
+                    pass
+            except ValueError:
+                pass
+        
+        # Redirect to index if page_id parameter not provided or does not return model instance
+        return redirect(reverse('index'))
 
 def index(request):
     # Set cookie to test in about() view
@@ -66,6 +101,8 @@ def about(request):
 
     # Call helper function to handle cookies
     visitor_cookie_handler(request)
+
+    # Return rendered response to client
     context_dict = {
         'visits': request.session['visits']
     }
@@ -81,6 +118,7 @@ def add_category(request):
         if form.is_valid():
             # Save new category to database
             form.save(commit=True)
+
             # Redirect to index
             return index(request)
         else:
@@ -96,6 +134,8 @@ def add_category(request):
 @login_required
 def add_page(request, category_name_slug):
     try:
+        # Find category with given slug
+        # get() method returns model instance or raises DoesNotExist exception
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
@@ -112,6 +152,7 @@ def add_page(request, category_name_slug):
                 page.category = category
                 page.views = 0
                 page.save()
+
                 # Redirect to category
                 return show_category(request, category_name_slug)
         else:
@@ -174,6 +215,7 @@ def add_page(request, category_name_slug):
 
 @login_required
 def restricted(request):
+    # Return rendered response to client
     context_dict = {}
     return render(request, 'rango/restricted.html', context_dict)
 
@@ -195,4 +237,5 @@ def show_category(request, category_name_slug):
         context_dict['category'] = None
         context_dict['pages'] = None
 
+    # Return rendered response to client
     return render(request, 'rango/category.html', context_dict)
