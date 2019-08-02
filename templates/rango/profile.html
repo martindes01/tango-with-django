@@ -9,7 +9,11 @@
 {% block body_block %}
     <h1>Profile - {{ selecteduser.username }}</h1>
     <p>
+    {% if userprofile.picture %}
         <img src="{{ MEDIA_URL }}{{ userprofile.picture }}" width="300" height="300" alt="{{ selecteduser.username }}" />
+    {% else %}
+        No profile picture.
+    {% endif %}
     </p>
     
     <p>
@@ -24,6 +28,4 @@
         <a href="{{ userprofile.website }}">{{ userprofile.website }}</a>
     {% endif %}
     </p>
-    
-    <p id="edit_profile"></p>
 {% endblock %}
