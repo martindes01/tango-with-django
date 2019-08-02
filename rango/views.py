@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import reverse
 
-from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from rango.models import Category, Page
+from rango.forms import CategoryForm, PageForm, UserProfileForm
+from rango.models import Category, Page, UserProfile
 
 from datetime import datetime
 
@@ -69,7 +69,7 @@ def track_url(request):
                 pass
         
         # Redirect to index if page_id parameter not provided or does not return model instance
-        return redirect(reverse('index'))
+        return redirect('index')
 
 def index(request):
     # Set cookie to test in about() view
@@ -147,8 +147,10 @@ def add_page(request, category_name_slug):
 
         if form.is_valid():
             if category:
-                # Save page to database
+                # Set commit=False since some attributes must be set separately
                 page = form.save(commit=False)
+                
+                # Set attributes and save page to database
                 page.category = category
                 page.views = 0
                 page.save()
@@ -166,52 +168,77 @@ def add_page(request, category_name_slug):
     }
     return render(request, 'rango/add_page.html', context_dict)
 
-# def register(request):
-#     # Set registration success false initially
-#     registered = False
+@login_required
+def profile(request, username):
+    try:
+        # Find user with given username
+        # get() method returns model instance or raises DoesNotExist exception
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        # Redirect to index
+        return redirect('index')
 
-#     if request.method == 'POST':
-#         # Retrieve raw form data
-#         user_form = UserForm(data=request.POST)
-#         profile_form = UserProfileForm(data=request.POST)
+    # get_or_create() method returns (object, created) tuple
+    # object is model instance and created is boolean
+    # A database entry is created if none is found
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    
+    # Populate form with user profile data
+    form = UserProfileForm({
+        'website': userprofile.website,
+        'picture': userprofile.picture,
+    })
 
-#         if user_form.is_valid() and profile_form.is_valid():
-#             # Save user form data to database
-#             user = user_form.save()
+    if request.method == 'POST':
+        # Retrieve form data
+        # UserProfileForm model instance references UserProfile model instance being updated
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
 
-#             # Hash password with set_password() method
-#             user.set_password(user.password)
-#             user.save()
+        if form.is_valid():
+            # Save updated user profile to database
+            form.save(commit=True)
 
-#             # Set commit=False since user attribute must set separately
-#             profile = profile_form.save(commit=False)
-#             profile.user = user
+            # Redirect to updated profile
+            #return redirect('profile', user.username)
+        else:
+            # Print form errors
+            print(form.errors)
 
-#             # Retrieve profile picture from form and add to user profile
-#             if 'picture' in request.FILES:
-#                 profile.picture = request.FILES['picture']
+    # Render form, including error messages
+    context_dict = {
+        'userprofile': userprofile,
+        'selecteduser': user,
+        'form': form,
+    }
+    return render(request, 'rango/profile.html', context_dict)
 
-#             # Save user profile model instance
-#             profile.save()
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
 
-#             # Set registration success true
-#             registered = True
-#         else:
-#             # Print form errors
-#             print(user_form.errors, profile_form.errors)
-#     else:
-#         # Not HTTP POST
-#         # Initialise blank forms
-#         user_form = UserForm()
-#         profile_form = UserProfileForm()
+    if request.method == 'POST':
+        # Retrieve form data
+        form = UserProfileForm(request.POST, request.FILES)
 
-#     # Render form, including error messages
-#     context_dict = {
-#         'user_form': user_form,
-#         'profile_form': profile_form,
-#         'registered': registered,
-#     }
-#     return render(request, 'rango/register.html', context_dict)
+        if form.is_valid():
+            # Set commit=False since user attribute must be set separately
+            user_profile = form.save(commit=False)
+
+            # Set user attribute and save user profile model instance
+            user_profile.user = request.user
+            user_profile.save()
+
+            # Redirect to index
+            return redirect('index')
+        else:
+            # Print form errors
+            print(form.errors)
+
+    # Render form, including error messages
+    context_dict = {
+        'form': form,
+    }
+    return render(request, 'rango/profile_registration.html', context_dict)
 
 @login_required
 def restricted(request):

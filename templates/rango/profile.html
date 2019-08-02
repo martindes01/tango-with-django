@@ -1,0 +1,29 @@
+{% extends 'rango/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ selecteduser.username }}
+{% endblock %}
+
+{% block body_block %}
+    <h1>Profile - {{ selecteduser.username }}</h1>
+    <p>
+        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}" width="300" height="300" alt="{{ selecteduser.username }}" />
+    </p>
+    
+    <p>
+    {% if selecteduser.username == user.username %}
+        <form method="POST" action="{% url 'profile' selecteduser.username %}" enctype="multipart/form-data">
+        {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Update profile" />
+        </form>
+    {% else %}
+        <strong>Website:</strong>
+        <a href="{{ userprofile.website }}">{{ userprofile.website }}</a>
+    {% endif %}
+    </p>
+    
+    <p id="edit_profile"></p>
+{% endblock %}

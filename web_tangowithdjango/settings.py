@@ -152,15 +152,22 @@ MEDIA_URL = '/media/'
 
 # Registration (django-registration-redux)
 
-# Set True to allow registration of new accounts (default)
+# Allow registration of new accounts (default True)
 #REGISTRATION_OPEN = True
+
+# Allow automatic login after account activation (default False)
+REGISTRATION_AUTO_LOGIN = True
+
+LOGIN_REDIRECT_URL = '/rango/'
+LOGIN_URL = '/accounts/login/'
+
+# Default backend
 
 # Activation period after which account will remain permanently inactive
 # Account may be deleted by provided maintenance scripts
 ACCOUNT_ACTIVATION_DAYS = 7
 
-LOGIN_REDIRECT_URL = '/rango/'
-LOGIN_URL = '/accounts/login/'
+# Simple backend
 
-# Set True to allow automatic login after account activation (default False)
-REGISTRATION_AUTO_LOGIN = True
+# See registration.backends.simple.views (default '/' with root 'accounts/register/')
+SIMPLE_BACKEND_REDIRECT_URL = '../../rango/register_profile/'
