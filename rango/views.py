@@ -169,6 +169,17 @@ def add_page(request, category_name_slug):
     return render(request, 'rango/add_page.html', context_dict)
 
 @login_required
+def list_profiles(request):
+    # Retrieve all user profiles
+    userprofile_list = UserProfile.objects.all()
+
+    # Return rendered response to client
+    context_dict = {
+        'userprofile_list': userprofile_list,
+    }
+    return render(request, 'rango/list_profiles.html', context_dict)
+
+@login_required
 def profile(request, username):
     try:
         # Find user with given username

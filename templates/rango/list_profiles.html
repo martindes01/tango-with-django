@@ -1,0 +1,32 @@
+{% extends 'rango/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+    User profiles
+{% endblock %}
+
+{% block body_block %}
+    <h1>User profiles</h1>
+
+    <p>
+    {% if userprofile_list %}
+        <ul>
+        {% for listuser in userprofile_list %}
+            <li>
+                <p>
+                {% if listuser.picture %}
+                    <img src="{{ MEDIA_URL }}{{ listuser.picture }}" width="32" height="32" />
+                {% else %}
+                    <img src="http://lorempixel.com/32/32/people/" width="32" height="32" />
+                {% endif %}
+                    <a href="{% url 'profile' listuser.user.username %}">{{ listuser.user.username }}</a>
+                </p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        There are no users registered.
+    {% endif %}
+    </p>
+{% endblock %}

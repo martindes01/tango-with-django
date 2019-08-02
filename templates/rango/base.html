@@ -39,7 +39,10 @@
                     <a href="{% url 'restricted' %}">Restricted page</a>
                 </li>
                 <li>
-                    <a href="{% url 'profile' user.username %}">Profile</a>
+                    <a href="{% url 'list_profiles' %}">All profiles</a>
+                </li>
+                <li>
+                    <a href="{% url 'profile' user.username %}">My profile</a>
                 </li>
                 <li>
                     <a href="{% url 'auth_password_change' %}">Change password</a>

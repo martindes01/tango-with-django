@@ -7,11 +7,19 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Profile - {{ selecteduser.username }}</h1>
+    <h1>
+    {% if selecteduser.username == user.username %}
+        My profile
+    {% else %}
+        Profile
+    {% endif %}
+        ({{ selecteduser.username }})
+    </h1>
     <p>
     {% if userprofile.picture %}
-        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}" width="300" height="300" alt="{{ selecteduser.username }}" />
+        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}" width="240" height="240" alt="{{ selecteduser.username }}" />
     {% else %}
+        <!-- <img src="http://lorempixel.com/240/240/people" width="240" height="240" alt="{{ selecteduser.username }}" /> -->
         No profile picture.
     {% endif %}
     </p>
