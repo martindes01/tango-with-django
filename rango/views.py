@@ -254,8 +254,8 @@ def show_category(request, category_name_slug):
         # get() method returns model instance or raises DoesNotExist exception
         category = Category.objects.get(slug=category_name_slug)
         
-        # Retrieve list of pages associated with category
-        pages = Page.objects.filter(category=category)
+        # Retrieve ordered list of pages associated with category
+        pages = Page.objects.filter(category=category).order_by('-views')
 
         # Add results to context dictionary under relevent keys
         context_dict['category'] = category
