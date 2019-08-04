@@ -12,8 +12,16 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
     def save(self, *args, **kwargs):
+        # Ensure views is non-negative
+        if self.views < 0:
+            self.views = 0
+
+        # Create slug from name
         self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
+
+        # Override save() method
+        # super() previously super(Category, self)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
