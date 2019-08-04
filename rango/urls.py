@@ -9,6 +9,7 @@ urlpatterns = [
     path('category/<slug:category_name_slug>/', views.show_category, name='show_category'),
     path('category/<slug:category_name_slug>/add_page/', views.add_page, name='add_page'),
     path('goto/', views.track_url, name='goto'),
+    path('like/', views.like_category, name='like_category'),
     path('profile/<username>', views.profile, name='profile'),
     path('profiles/', views.list_profiles, name='list_profiles'),
     path('register_profile/', views.register_profile, name='register_profile'),

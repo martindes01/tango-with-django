@@ -53,7 +53,7 @@ def track_url(request):
                 page_id = request.GET['page_id']
 
                 try:
-                    # Find page with given id
+                    # Find page with given ID
                     # get() method returns model instance or raises DoesNotExist exception
                     page = Page.objects.get(id=page_id)
 
@@ -167,6 +167,31 @@ def add_page(request, category_name_slug):
         'category': category,
     }
     return render(request, 'rango/add_page.html', context_dict)
+
+@login_required
+def like_category(request):
+    cat_id = None
+    likes = 0
+
+    if request.method == 'GET':
+        # Retrieve category ID
+        cat_id = request.GET['category_id']
+
+        if cat_id:
+            try:
+                # Find category with given ID
+                # get() method returns model instance or raises DoesNotExist exception
+                cat = Category.objects.get(id=int(cat_id))
+
+                # Increment and save category likes and update local likes variable
+                likes = cat.likes + 1
+                cat.likes = likes
+                cat.save()
+            except Category.DoesNotExist:
+                pass
+
+    # Return repsonse to client
+    return HttpResponse(likes)
 
 @login_required
 def list_profiles(request):

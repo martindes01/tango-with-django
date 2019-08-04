@@ -3,12 +3,12 @@ $(document).ready(function() {
         $("#msg").append("ooo");
     });
 
-    $("p:nth-last-child(2):first").hover(
+    $("p :nth-last-child(2) :first").hover(
         function() {
-            $(this).css('color', 'red');
+            $(this).css("color", "red");
         },
         function() {
-            $(this).css('color', 'blue');
+            $(this).css("color", "blue");
         }
     );
 });
