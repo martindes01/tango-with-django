@@ -14,4 +14,5 @@ urlpatterns = [
     path('profiles/', views.list_profiles, name='list_profiles'),
     path('register_profile/', views.register_profile, name='register_profile'),
     path('restricted/', views.restricted, name='restricted'),
+    path('suggest/', views.suggest_category, name='suggest_category'),
 ]

@@ -18,4 +18,20 @@ $(document).ready(function() {
             }
         );
     });
+
+    $("#suggestion").keyup(function() {
+        // Retrieve query
+        var query = $(this).val();
+
+        // Make AJAX GET request to /rango/suggest/ containing query
+        $.get(
+            "/rango/suggest/",
+            {
+                suggestion: query
+            },
+            function(data) {
+                $("#cats").html(data);
+            }
+        );
+    });
 });

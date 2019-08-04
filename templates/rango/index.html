@@ -19,6 +19,11 @@
         {% for category in categories %}
             <li>
                 <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+            {% if category.likes == 1 %}
+                ({{ category.likes }} like)
+            {% else %}
+                ({{ category.likes }} likes)
+            {% endif %}
             </li>
         {% endfor %}
         </ul>
@@ -34,6 +39,11 @@
         {% for page in pages %}
             <li>
                 <a href="{{ page.url }}">{{ page.title }}</a>
+            {% if category.likes == 1 %}
+                ({{ page.views }} view)
+            {% else %}
+                ({{ page.views }} views)
+            {% endif %}
             </li>
         {% endfor %}
         </ul>

@@ -75,6 +75,36 @@ def populate():
             'views': 32,
             'likes': 16,
         },
+        'Pascal': {
+            'pages': [],
+            'views': 16,
+            'likes': 8,
+        },
+        'Perl': {
+            'pages': [],
+            'views': 8,
+            'likes': 4,
+        },
+        'PHP': {
+            'pages': [],
+            'views': 4,
+            'likes': 2,
+        },
+        'Prolog': {
+            'pages': [],
+            'views': 2,
+            'likes': 1,
+        },
+        'PostScript': {
+            'pages': [],
+            'views': 1,
+            'likes': 0,
+        },
+        'Programming': {
+            'pages': [],
+            'views': 0,
+            'likes': 0,
+        },
     }
 
     # Add each category in category dictionary

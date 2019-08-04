@@ -10,7 +10,24 @@ from rango.models import Category, Page, UserProfile
 from datetime import datetime
 
 
-# Cookie helper functions
+# Helper functions
+
+def get_category_list(max_results=0, starts_with=''):
+    cat_list = []
+
+    # Retrieve all categories beginning with starts_with if supplied
+    if starts_with:
+        # istartwith filter ignores case
+        # startwith filter recognises case
+        cat_list = Category.objects.filter(name__istartswith=starts_with)
+
+    # Limit categories to max_results if supplied
+    if max_results > 0:
+        if len(cat_list) > max_results:
+            cat_list = cat_list[:max_results]
+
+    # Return category list
+    return cat_list
 
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -302,3 +319,21 @@ def show_category(request, category_name_slug):
 
     # Return rendered response to client
     return render(request, 'rango/category.html', context_dict)
+
+def suggest_category(request):
+    cat_list = []
+    starts_with = ''
+
+    if request.method == 'GET':
+        # Retrieve query and remove trailing and leading characters
+        starts_with = request.GET['suggestion'].strip()
+
+        # Get list of suggested categories
+        cat_list = get_category_list(8, starts_with)
+
+    # Return rendered response to client
+    context_dict = {
+        'cats': cat_list,
+        'query': starts_with,
+    }
+    return render(request, 'rango/cats.html', context_dict)

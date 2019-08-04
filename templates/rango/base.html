@@ -25,9 +25,14 @@
 
     <body>
         <div>
-        {% block sidebar_block %}
-            {% get_category_list category %}
-        {% endblock %}
+            <p>Type to find a category</p>
+            <p>
+                <form>
+                    <input type="text" name="suggestion" value="" id="suggestion" />
+                    </li>
+                </form>
+            </p>
+            <p id="cats"></p>
         </div>
 
         <div>
