@@ -1,7 +1,10 @@
 from django.shortcuts import reverse
 from django.test import TestCase
 
-from rango.models import Category
+from rango.models import Category, Page
+
+from datetime import datetime
+
 
 # Helper functions
 
@@ -11,6 +14,11 @@ def add_cat(name, views, likes):
     c.likes = likes
     c.save()
     return c
+
+def add_page(category, title):
+    p = Page.objects.get_or_create(category=category, title=title)[0]
+    p.save()
+    return p
 
 
 # Test function classes
@@ -33,6 +41,32 @@ class CategoryMethodTests(TestCase):
         cat = Category(name='Random Category String')
         cat.save()
         self.assertEqual(cat.slug, 'random-category-string')
+
+class PageMethodTests(TestCase):
+    def test_ensure_visits_not_in_future(self):
+        """
+        ensure_visits_not_in_future checks first visit and last visit not in future
+        """
+        
+        # Create category and add page
+        c = add_cat('test', 1, 1)
+        p = add_page(c, 'test')
+
+        # Test visits not in future
+        self.assertEqual(p.first_visit < datetime.now(), True)
+        self.assertEqual(p.last_visit < datetime.now(), True)
+
+    def test_ensure_last_visit_not_before_first(self):
+        """
+        ensure_last_visit_not_before_first checks last visit not before first
+        """
+
+        # Create category and add page
+        c = add_cat('test', 1, 1)
+        p = add_page(c, 'test')
+
+        # Test last visit not before first
+        self.assertEqual(p.last_visit < p.first_visit, False)
 
 class IndexViewTests(TestCase):
     def test_index_view_with_categories(self):

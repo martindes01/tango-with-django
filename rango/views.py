@@ -74,9 +74,17 @@ def track_url(request):
                     # get() method returns model instance or raises DoesNotExist exception
                     page = Page.objects.get(id=page_id)
 
-                    # Increment page views and save
+                    # Set last_visit to now
+                    page.last_visit = datetime.now()
+
+                    # Increment page views
                     page.views = page.views + 1
+
+                    # Update page
                     page.save()
+
+                    print("First visit {0}".format(str(page.first_visit)))
+                    print("Last visit {0}".format(str(page.last_visit)))
 
                     # Redirect to page
                     return redirect(page.url)

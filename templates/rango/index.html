@@ -38,7 +38,7 @@
         <ul>
         {% for page in pages %}
             <li>
-                <a href="{{ page.url }}">{{ page.title }}</a>
+                <a href="{% url 'goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
             {% if category.likes == 1 %}
                 ({{ page.views }} view)
             {% else %}

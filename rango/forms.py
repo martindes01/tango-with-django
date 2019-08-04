@@ -25,10 +25,9 @@ class PageForm(forms.ModelForm):
         # Associate model with form
         model = Page
 
-        # Exclude category field from form
-        exclude = ('category',)
-        # Equivalent to including every other field
-        #fields = ('title', 'url', 'views',)
+        # Include required fields
+        # Equivalent to excluding every other field with exclude = (,)
+        fields = ('title', 'url', 'views',)
 
     def clean(self):
         cleaned_data = self.cleaned_data
