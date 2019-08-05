@@ -1,0 +1,7 @@
+# Folders
+__pycache__/
+media/
+
+# Files
+*.pyc
+db.sqlite3
