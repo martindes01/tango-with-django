@@ -1,7 +1,19 @@
-# Folders
+# Django
+
 __pycache__/
 media/
 
-# Files
 *.pyc
+
+.coverage
 db.sqlite3
+
+
+# Node
+
+node_modules/
+
+
+# Development
+
+index.html
