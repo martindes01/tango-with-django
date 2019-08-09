@@ -5,84 +5,145 @@
 
 <html>
 
-    <head lang="en">
-        <meta charset="UTF-8" />
-        <title>
-            Rango -
-        {% block title_block %}
-            How to tango with Django!
-        {% endblock %}
-        </title>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>
+    Rango -
+    {% block title_block %}
+    How to tango with Django!
+    {% endblock %}
+  </title>
 
-        <link rel="stylesheet" href="{% static 'css/bundle.css' %}" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500|Roboto+Slab&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
-        <script>
-            window.jQuery || document.write("<script src=\"{% static 'js/jquery.min.js' %}\"><\/script>")
-        </script>
-        
-        <script src="{% static 'js/rango-ajax.js' %}"></script>
-        <script src="{% static 'js/rango-jquery.js' %}"></script>
-    </head>
+  <link rel="stylesheet" href="{% static 'css/bundle.css' %}">
 
-    <body>
-        <div>
-            <p>Type to find a category</p>
-            <p>
-                <form>
-                    <input type="text" name="suggestion" value="" id="suggestion" />
-                    </li>
-                </form>
-            </p>
-            <p id="cats"></p>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+  <script>
+    window.jQuery || document.write("<script src=\"{% static 'js/jquery.min.js' %}\"><\/script>");
+  </script>
+
+  <script src="{% static 'js/rango-ajax.js' %}"></script>
+  <script src="{% static 'js/rango-jquery.js' %}"></script>
+</head>
+
+<body class="mdc-typography">
+  <aside class="mdc-drawer mdc-drawer--modal">
+    <div class="mdc-drawer__header">
+      <h3 class="mdc-drawer__title">Rango</h3>
+      <h6 class="mdc-drawer__subtitle">Django mango fantango!</h6>
+    </div>
+    <div class="mdc-drawer__content">
+      <nav class="mdc-list">
+        <a class="mdc-list-item" id="precedent-link" href="{% url 'index' %}">
+          <span class="mdc-list-item__text">Home</span>
+        </a>
+
+        <hr class="mdc-list-divider">
+
+        {% if user.is_authenticated %}
+        <a class="mdc-list-item" href="{% url 'add_category' %}">
+          <span class="mdc-list-item__text">Add a new category</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'restricted' %}">
+          <span class="mdc-list-item__text">Restricted page</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'list_profiles' %}">
+          <span class="mdc-list-item__text">All profiles</span>
+        </a>
+        {% endif %}
+
+        <hr class="mdc-list-divider">
+
+        <a class="mdc-list-item" href="{% url 'about' %}">
+          <span class="mdc-list-item__text">About Rango</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="mdc-drawer-scrim"></div>
+
+  <div class="mdc-drawer-app-content">
+    <header class="mdc-top-app-bar app-bar">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+          <span class="mdc-top-app-bar__title">Rango</span>
+        </section>
+
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+
+          <div class="mdc-menu-surface--anchor">
+            <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" id="menu-button" aria-label="More">more_vert</button>
+            <div class="mdc-menu mdc-menu-surface">
+              <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                {% if user.is_authenticated %}
+                <a class="mdc-list-item" href="{% url 'profile' user.username %}" role="menuitem">
+                  <span class="mdc-list-item__text">My profile</span>
+                </a>
+                <a class="mdc-list-item" href="{% url 'auth_password_change' %}" role="menuitem">
+                  <span class="mdc-list-item__text">Change password</span>
+                </a>
+                <a class="mdc-list-item" href="{% url 'auth_logout' %}?next=/rango/" role="menuitem">
+                  <span class="mdc-list-item__text">Log out</span>
+                </a>
+                {% else %}
+                <a class="mdc-list-item" href="{% url 'auth_login' %}" role="menuitem">
+                  <span class="mdc-list-item__text">Log in</span>
+                </a>
+                <a class="mdc-list-item" href="{% url 'registration_register' %}" role="menuitem">
+                  <span class="mdc-list-item__text">Register</span>
+                </a>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </header>
+
+    <main class="main-content" id="main-content">
+      <div class="mdc-top-app-bar--fixed-adjust">
+        <div class="mdc-layout-grid">
+          <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-3-tablet">
+
+              <!-- <label class="mdc-text-field mdc-text-field--fullwidth">
+                <input type="text" id="suggestion" class="mdc-text-field__input">
+                <span class="mdc-floating-label">Find a category</span>
+                <div class="mdc-line-ripple"></div>
+              </label> -->
+
+              <label class="mdc-text-field mdc-text-field--outlined">
+                <input type="text" id="suggestion" class="mdc-text-field__input">
+                <div class="mdc-notched-outline">
+                  <div class="mdc-notched-outline__leading"></div>
+                  <div class="mdc-notched-outline__notch">
+                    <label class="mdc-floating-label">Find a category</label>
+                  </div>
+                  <div class="mdc-notched-outline__trailing"></div>
+                </div>
+              </label>
+
+              <ul class="mdc-list mdc-list--dense mdc-list--two-line" id="cats"></ul>
+
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-5-tablet">
+
+              {% block body_block %}
+              {% endblock %}
+
+            </div>
+          </div>
         </div>
+      </div>
+    </main>
+  </div>
 
-        <div>
-        {% block body_block %}
-        {% endblock %}
-        </div>
-
-        <hr />
-
-        <div>
-            <ul>
-            {% if user.is_authenticated %}
-                <li>
-                    <a href="{% url 'add_category' %}">Add a new category</a>
-                </li>
-                <li>
-                    <a href="{% url 'restricted' %}">Restricted page</a>
-                </li>
-                <li>
-                    <a href="{% url 'list_profiles' %}">All profiles</a>
-                </li>
-                <li>
-                    <a href="{% url 'profile' user.username %}">My profile</a>
-                </li>
-                <li>
-                    <a href="{% url 'auth_password_change' %}">Change password</a>
-                </li>
-                <li>
-                    <a href="{% url 'auth_logout' %}?next=/rango/">Log out</a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{% url 'auth_login' %}">Log in</a>
-                </li>
-                <li>
-                    <a href="{% url 'registration_register' %}">Register</a>
-                </li>
-            {% endif %}
-                <li>
-                    <a href="{% url 'about' %}">About Rango</a>
-                </li>
-                <li>
-                    <a href="{% url 'index' %}">Index</a>
-                </li>
-            </ul>
-        </div>
-
-        <script src="{% static 'js/bundle.js' %}"></script>
-    </body>
+  <script src="{% static 'js/bundle.js' %}"></script>
+</body>
 
 </html>

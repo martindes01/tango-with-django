@@ -1,21 +1,22 @@
-<ul>
 {% if query %}
-    {% if cats %}
-        {% for c in cats %}
-        <li>
-            {% if c == act_cat %}
-            <strong>
-                <a href="{% url 'show_category' c.slug %}">{{ c.name }}</a>
-            </strong>
-            {% else %}
-            <a href="{% url 'show_category' c.slug %}">{{ c.name }}</a>
-            {% endif %}
-        </li>
-        {% endfor %}
-    {% else %}
-        <li>
-            <strong>No matching categories found.</strong>
-        </li>
-    {% endif %}
+{% if cats %}
+{% for c in cats %}
+<a class="mdc-list-item" href="{% url 'show_category' c.slug %}">
+  <span class="mdc-list-item__text">
+    <span class="mdc-list-item__primary-text">{{ c.name }}</span>
+    <span class="mdc-list-item__secondary-text">
+      {% if c.likes == 1 %}
+      {{ c.likes }} like
+      {% else %}
+      {{ c.likes }} likes
+      {% endif %}
+    </span>
+  </span>  
+</a>
+{% endfor %}
+{% else %}
+<li class="mdc-list-item">
+  <span class="mdc-list-item__text">No matching categories found.</span>
+</li>
 {% endif %}
-</ul>
+{% endif %}

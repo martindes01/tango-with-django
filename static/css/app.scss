@@ -1,6 +1,91 @@
+// Custom
+
+$body-font-family: unquote('Roboto Mono, monospace');
+$headline-font-family: unquote('Roboto Slab, serif');
+
+
+// Overrides
+
+// $mdc-theme-primary: #fcb8ab;
+// $mdc-theme-secondary: #feeae6;
+// $mdc-theme-background: #fff;
+// $mdc-theme-surface: #fff;
+// $mdc-theme-error: #b00020;
+
+// $mdc-theme-on-primary: #442b2d;
+// $mdc-theme-on-secondary: #442b2d;
+// $mdc-theme-on-error: #fff;
+// $mdc-theme-on-surface: #000;
+
+$mdc-typography-font-family: $body-font-family;
+
+$mdc-typography-styles-headline1: (
+  font-family: $headline-font-family,
+);
+$mdc-typography-styles-headline2: (
+  font-family: $headline-font-family,
+);
+$mdc-typography-styles-headline3: (
+  font-family: $headline-font-family,
+);
+$mdc-typography-styles-headline4: (
+  font-family: $headline-font-family,
+);
+$mdc-typography-styles-headline5: (
+  font-family: $headline-font-family,
+);
+$mdc-typography-styles-headline6: (
+  font-family: $headline-font-family,
+);
+
+
+// Imports
+
 @import "@material/button/mdc-button";
+@import "@material/drawer/mdc-drawer";
+@import "@material/icon-button/mdc-icon-button";
+@import "@material/layout-grid/mdc-layout-grid";
+@import "@material/list/mdc-list";
+@import "@material/menu-surface/mdc-menu-surface";
+@import "@material/menu/mdc-menu";
+@import "@material/textfield/mdc-text-field";
+@import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/typography/mdc-typography";
+
+
+// Common
+
+body {
+  margin: 0px;
+}
+
+
+// Modal drawer
+
+body {
+  display: flex;
+  height: 100vh;
+}
+
+.app-bar {
+  position: absolute;
+}
+
+.main-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}  
+
+
+// Custom
 
 .foo-button {
-    @include mdc-button-ink-color(teal);
-    @include mdc-states(teal);
+  @include mdc-button-ink-color(teal);
+  @include mdc-states(teal);
 }

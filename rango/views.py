@@ -19,7 +19,7 @@ def get_category_list(max_results=0, starts_with=''):
     if starts_with:
         # istartwith filter ignores case
         # startwith filter recognises case
-        cat_list = Category.objects.filter(name__istartswith=starts_with)
+        cat_list = Category.objects.filter(name__istartswith=starts_with).order_by('-likes')
 
     # Limit categories to max_results if supplied
     if max_results > 0:
