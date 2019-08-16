@@ -1,19 +1,18 @@
 # Django
 
-__pycache__/
 media/
-
-*.pyc
 
 .coverage
 db.sqlite3
 
 
+# Python
+
+__pycache__/
+
+*.pyc
+
+
 # Node
 
 node_modules/
-
-
-# Development
-
-index.html
