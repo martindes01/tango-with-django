@@ -1,5 +1,5 @@
 {
-  "name": "web_tangowithdjango",
+  "name": "tango-with-django",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martindes01/web_tangowithdjango.git"
+    "url": "git+https://github.com/martindes01/tango-with-django.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/martindes01/web_tangowithdjango/issues"
+    "url": "https://github.com/martindes01/tango-with-django/issues"
   },
-  "homepage": "https://github.com/martindes01/web_tangowithdjango#readme",
+  "homepage": "https://github.com/martindes01/tango-with-django#readme",
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",

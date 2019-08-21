@@ -1,1 +1,1 @@
-# web_tangowithdjango
+# tango-with-django
