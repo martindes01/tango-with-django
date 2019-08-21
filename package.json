@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/martindes01/tango-with-django.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Martin de Spirlet",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/martindes01/tango-with-django/issues"
   },
